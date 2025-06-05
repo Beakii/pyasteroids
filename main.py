@@ -5,9 +5,14 @@ from player import Player
 def main():
     pygame.init()
     game_clock = pygame.time.Clock()
-    deltaTime = 0
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    deltaTime = 0
+
+    group_updateable = pygame.sprite.Group()
+    group_drawable = pygame.sprite.Group()
+    Player.containers = (group_updateable, group_drawable)
+    Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
 
 # Main Game Loop
     while True:
@@ -19,7 +24,9 @@ def main():
         time_since_last_call = game_clock.tick(60)
         deltaTime = time_since_last_call/1000
 
-        player.draw(screen)
+        for drawable in group_drawable:
+            drawable.draw(screen)
+        group_updateable.update(deltaTime)
 
         pygame.display.flip()
 
